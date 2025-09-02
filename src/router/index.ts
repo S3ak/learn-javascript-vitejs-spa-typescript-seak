@@ -55,7 +55,7 @@ export default async function router(
     (route) => route.url === currentPath
   );
 
-  let html = NotFoundPage();
+  let html = await NotFoundPage();
 
   if (currentRoute) {
     html = await currentRoute.component(state);

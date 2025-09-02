@@ -1,24 +1,28 @@
-import type { Product, ProductResponse } from "../types";
-import { dummyProducts } from "../stubs/dummy-products";
+import type { AppState, Product, ProductResponse } from "../types";
 import AppButton from "../components/app-button/AppButton";
 import ProductCard from "../components/product-card/ProductCard";
+import { get } from "../services/api";
 
-const defaultState = {
-  products: dummyProducts,
-};
+export default async function ProductsPage(state: AppState) {
+  let products = state.products;
 
-export default async function ProductsPage(state = defaultState) {
-  let products;
   try {
-    const response = await fetch("https://dummyjson.com/products");
-    const jsonResponse: ProductResponse = await response.json();
+    const jsonResponse: ProductResponse = await get("/products");
 
     products = jsonResponse.products;
+
+    if (products.length === 0) {
+      return `<div>There are no products</div>`;
+    }
   } catch (error) {
-    return `<div>Something went wrong</div>`;
+    return errorTemplate;
   }
 
-  const template = `
+  return renderProductsTemplate(products);
+}
+
+function renderProductsTemplate(products: Product[] = []) {
+  return `
    <div class="page-container">
         <div class="search-section">
           <input type="text" class="search-input" placeholder="Search products..." />
@@ -37,8 +41,6 @@ export default async function ProductsPage(state = defaultState) {
         </div>
       </div>
     `;
-
-  return template;
 }
 
 const loadingTemplate = `
@@ -64,24 +66,3 @@ const errorTemplate = `
         </div>
       </div>
 `;
-
-const baseTemplate = (state) => {
-  return `<div class="page-container">
-        <div class="search-section">
-          <input type="text" class="search-input" placeholder="Search products..." />
-        </div>
-        
-        <div class="products-header">
-          <h1>Our Products</h1>
-          <p class="products-count">${
-            state.products.length
-          } products available</p>
-        </div>
-
-        <div class="products-grid">
-          ${state.products
-            .map((product: Product) => ProductCard({ product }))
-            .join("")}
-        </div>
-      </div>`;
-};

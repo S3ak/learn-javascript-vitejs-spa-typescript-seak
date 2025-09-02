@@ -1,9 +1,13 @@
 // history.replaceState({ page: 'updated-profile' }, '', '/profile-updated');
 
-export default function ProfilePage(state) {
+import type { AppState } from "../types";
+
+export default async function ProfilePage(state: AppState) {
   const orderHistory = generateMockOrderHistory();
 
-  const { user } = state;
+  const { user } = state.auth;
+
+  if (!user) return `<div>Something Went Wrong</div>`;
 
   const template = `
       <div class="page-container">

@@ -43,9 +43,12 @@ async function apiClient(endpoint: string, options = {}) {
   }
 }
 
+type Endpoint = string;
+
 // Now we can export helper methods
-export const get = (endpoint) => apiClient(endpoint);
-export const post = (endpoint, body) => apiClient(endpoint, { body });
-export const put = (endpoint, body) =>
+export const get = (endpoint: Endpoint) => apiClient(endpoint);
+export const post = (endpoint: Endpoint, body) => apiClient(endpoint, { body });
+export const put = (endpoint: Endpoint, body) =>
   apiClient(endpoint, { method: "PUT", body });
-export const del = (endpoint) => apiClient(endpoint, { method: "DELETE" });
+export const del = (endpoint: Endpoint) =>
+  apiClient(endpoint, { method: "DELETE" });

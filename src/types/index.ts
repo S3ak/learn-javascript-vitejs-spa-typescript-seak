@@ -20,11 +20,11 @@ export interface AuthState {
 }
 
 export interface AppState {
-  products: Product[];
-  cart: CartItem[];
-  auth: AuthState;
-  currentPage: string;
-  selectedProduct: Product | null;
+  products?: Product[];
+  cart?: CartItem[];
+  auth?: AuthState;
+  currentPage?: string;
+  selectedProduct?: Product | null;
 }
 
 export interface ProductResponse {
