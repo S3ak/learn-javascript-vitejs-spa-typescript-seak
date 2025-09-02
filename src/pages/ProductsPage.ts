@@ -1,11 +1,23 @@
-import type { Product } from "../types";
+import type { Product, ProductResponse } from "../types";
 import { dummyProducts } from "../stubs/dummy-products";
+import AppButton from "../components/app-button/AppButton";
+import ProductCard from "../components/product-card/ProductCard";
 
 const defaultState = {
   products: dummyProducts,
 };
 
-export default function ProductsPage(state = defaultState) {
+export default async function ProductsPage(state = defaultState) {
+  let products;
+  try {
+    const response = await fetch("https://dummyjson.com/products");
+    const jsonResponse: ProductResponse = await response.json();
+
+    products = jsonResponse.products;
+  } catch (error) {
+    return `<div>Something went wrong</div>`;
+  }
+
   const template = `
    <div class="page-container">
         <div class="search-section">
@@ -14,79 +26,19 @@ export default function ProductsPage(state = defaultState) {
         
         <div class="products-header">
           <h1>Our Products</h1>
-          <p class="products-count">${
-            state.products.length
-          } products available</p>
+          <div>${AppButton({
+            text: "Look at all the things I can't afford",
+          })}</div>
+          <p class="products-count">${products.length} products available</p>
         </div>
 
         <div class="products-grid">
-          ${state.products
-            .map((product) => renderProductCard(product))
-            .join("")}
+          ${products.map((product) => ProductCard({ product })).join("")}
         </div>
       </div>
     `;
 
   return template;
-}
-
-function renderProductCard(product: Product) {
-  const discountedPrice =
-    product.price * (1 - product.discountPercentage / 100);
-
-  return `
-      <div class="product-card" data-product-id="${product.id}">
-        <div class="product-image">
-          <img src="${product.thumbnail}" alt="${
-    product.title
-  }" loading="lazy" />
-          ${
-            product.discountPercentage > 0
-              ? `
-            <div class="discount-badge">-${Math.round(
-              product.discountPercentage
-            )}%</div>
-          `
-              : ""
-          }
-        </div>
-        
-        <div class="product-info">
-          <h3 class="product-title">${product.title}</h3>
-          <p class="product-brand">${product.brand}</p>
-          <div class="product-rating">
-            ${"★".repeat(Math.floor(product.rating))}${"☆".repeat(
-    5 - Math.floor(product.rating)
-  )}
-            <span class="rating-value">${product.rating}</span>
-          </div>
-          
-          <div class="product-pricing">
-            ${
-              product.discountPercentage > 0
-                ? `
-              <span class="original-price">$${product.price.toFixed(2)}</span>
-            `
-                : ""
-            }
-            <span class="current-price">$${discountedPrice.toFixed(2)}</span>
-          </div>
-          
-          <div class="product-actions">
-            <button class="btn btn-primary add-to-cart" data-product-id="${
-              product.id
-            }">
-              Add to Cart
-            </button>
-            <button class="btn btn-secondary view-details" data-product-id="${
-              product.id
-            }">
-              View Details
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
 }
 
 const loadingTemplate = `
@@ -128,7 +80,7 @@ const baseTemplate = (state) => {
 
         <div class="products-grid">
           ${state.products
-            .map((product: Product) => renderProductCard(product))
+            .map((product: Product) => ProductCard({ product }))
             .join("")}
         </div>
       </div>`;

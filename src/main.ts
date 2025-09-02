@@ -1,29 +1,5 @@
 import "./style.css";
-import { dummyProducts } from "./stubs/dummy-products";
-import ProfilePage from "./pages/ProfilePage";
-import ProductsPage from "./pages/ProductsPage";
-import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/AboutPage";
-import NotFoundPage from "./pages/NotFoundPage";
-
-const PATHS = {
-  home: {
-    url: "/",
-    component: HomePage,
-  },
-  products: {
-    url: "/products",
-    component: ProductsPage,
-  },
-  about: {
-    url: "/about",
-    component: AboutPage,
-  },
-  profile: {
-    url: "/profile",
-    component: ProfilePage,
-  },
-} as const;
+import router from "./router";
 
 // Render initial content based on the current path
 renderContent(window.location.pathname);
@@ -66,25 +42,13 @@ function navigate(event: MouseEvent) {
   }
 }
 
-function renderContent(path = "") {
+async function renderContent(path = "") {
   // Get the element where content will be rendered
   const contentContainer = document.getElementById("app-content");
 
   if (!path || !contentContainer) return;
 
-  // Find the matching route by path
-  const route = Object.values(PATHS).find((route) => route.url === path);
-
-  let html = "";
-
-  if (route) {
-    // Pass dummyState only to ProductsPage, pass nothing to others
-    html = route.component();
-  } else {
-    html = NotFoundPage();
-  }
-
-  contentContainer.innerHTML = html;
+  contentContainer.innerHTML = await router(path);
 }
 
 // function isInputElement(target: EventTarget): target is HTMLInputElement {

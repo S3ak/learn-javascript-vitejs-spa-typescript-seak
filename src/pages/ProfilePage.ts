@@ -1,19 +1,9 @@
 // history.replaceState({ page: 'updated-profile' }, '', '/profile-updated');
 
-import type { User } from "../types";
-
-const stubUser = {
-  image: "https://i.pravatar.cc/150?img=34",
-  username: "dondada",
-  firstName: "Skuba",
-  lastName: "Koooper",
-  id: 12345,
-  email: "skub@mail.com",
-  phone: "4121234567",
-};
-
-export default function ProfilePage(user: User = stubUser) {
+export default function ProfilePage(state) {
   const orderHistory = generateMockOrderHistory();
+
+  const { user } = state;
 
   const template = `
       <div class="page-container">
