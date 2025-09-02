@@ -1,13 +1,13 @@
-import { ApiService } from '../services/api';
-import { store } from '../store';
-import { router } from '../router';
+import { ApiService } from "../services/api";
+import { store } from "../services/store";
+import { router } from "../router";
 
 export class SignInPage {
   private element: HTMLElement;
 
   constructor() {
-    this.element = document.createElement('div');
-    this.element.className = 'signin-page';
+    this.element = document.createElement("div");
+    this.element.className = "signin-page";
     this.render();
     this.setupEventListeners();
   }
@@ -58,35 +58,35 @@ export class SignInPage {
   }
 
   private setupEventListeners(): void {
-    const form = this.element.querySelector('#signin-form') as HTMLFormElement;
-    const errorDiv = this.element.querySelector('.auth-error') as HTMLElement;
+    const form = this.element.querySelector("#signin-form") as HTMLFormElement;
+    const errorDiv = this.element.querySelector(".auth-error") as HTMLElement;
 
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      
+
       const formData = new FormData(form);
-      const username = formData.get('username') as string;
-      const password = formData.get('password') as string;
+      const username = formData.get("username") as string;
+      const password = formData.get("password") as string;
 
       try {
         this.setLoading(true);
         this.hideError();
-        
+
         const { user, token } = await ApiService.login(username, password);
         store.login(user, token);
-        router.navigate('products');
+        router.navigate("products");
       } catch (error) {
-        this.showError('Invalid username or password. Please try again.');
+        this.showError("Invalid username or password. Please try again.");
       } finally {
         this.setLoading(false);
       }
     });
 
     // Navigation
-    this.element.addEventListener('click', (e) => {
+    this.element.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
-      const route = target.getAttribute('data-route');
-      
+      const route = target.getAttribute("data-route");
+
       if (route) {
         e.preventDefault();
         router.navigate(route);
@@ -95,20 +95,22 @@ export class SignInPage {
   }
 
   private setLoading(loading: boolean): void {
-    const submitBtn = this.element.querySelector('.auth-submit') as HTMLButtonElement;
+    const submitBtn = this.element.querySelector(
+      ".auth-submit"
+    ) as HTMLButtonElement;
     submitBtn.disabled = loading;
-    submitBtn.textContent = loading ? 'Signing In...' : 'Sign In';
+    submitBtn.textContent = loading ? "Signing In..." : "Sign In";
   }
 
   private showError(message: string): void {
-    const errorDiv = this.element.querySelector('.auth-error') as HTMLElement;
+    const errorDiv = this.element.querySelector(".auth-error") as HTMLElement;
     errorDiv.textContent = message;
-    errorDiv.style.display = 'block';
+    errorDiv.style.display = "block";
   }
 
   private hideError(): void {
-    const errorDiv = this.element.querySelector('.auth-error') as HTMLElement;
-    errorDiv.style.display = 'none';
+    const errorDiv = this.element.querySelector(".auth-error") as HTMLElement;
+    errorDiv.style.display = "none";
   }
 
   getElement(): HTMLElement {

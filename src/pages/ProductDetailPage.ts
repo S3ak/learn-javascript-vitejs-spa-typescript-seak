@@ -1,23 +1,23 @@
-import { ApiService } from '../services/api';
-import { store } from '../store';
-import { router } from '../router';
-import { Product } from '../types';
+import { ApiService } from "../services/api";
+import { store } from "../services/store";
+import { router } from "../router";
+import { Product } from "../types";
 
 export class ProductDetailPage {
   private element: HTMLElement;
   private currentImageIndex = 0;
 
   constructor() {
-    this.element = document.createElement('div');
-    this.element.className = 'product-detail-page';
+    this.element = document.createElement("div");
+    this.element.className = "product-detail-page";
     this.loadProduct();
   }
 
   private async loadProduct(): Promise<void> {
     const productId = router.getCurrentProductId();
-    
+
     if (!productId) {
-      router.navigate('products');
+      router.navigate("products");
       return;
     }
 
@@ -51,22 +51,23 @@ export class ProductDetailPage {
         </div>
       </div>
     `;
-    
-    this.element.querySelector('.back-btn')?.addEventListener('click', () => {
-      router.navigate('products');
+
+    this.element.querySelector(".back-btn")?.addEventListener("click", () => {
+      router.navigate("products");
     });
   }
 
   private render(): void {
     const product = store.getState().selectedProduct;
-    
+
     if (!product) {
       this.renderError();
       return;
     }
 
-    const discountedPrice = product.price * (1 - product.discountPercentage / 100);
-    
+    const discountedPrice =
+      product.price * (1 - product.discountPercentage / 100);
+
     this.element.innerHTML = `
       <div class="page-container">
         <div class="breadcrumb">
@@ -78,20 +79,32 @@ export class ProductDetailPage {
         <div class="product-detail">
           <div class="product-gallery">
             <div class="main-image">
-              <img src="${product.images[this.currentImageIndex] || product.thumbnail}" 
+              <img src="${
+                product.images[this.currentImageIndex] || product.thumbnail
+              }" 
                    alt="${product.title}" class="product-main-img" />
             </div>
             
-            ${product.images.length > 1 ? `
+            ${
+              product.images.length > 1
+                ? `
               <div class="image-thumbnails">
-                ${product.images.map((image, index) => `
-                  <button class="thumbnail ${index === this.currentImageIndex ? 'active' : ''}" 
+                ${product.images
+                  .map(
+                    (image, index) => `
+                  <button class="thumbnail ${
+                    index === this.currentImageIndex ? "active" : ""
+                  }" 
                           data-index="${index}">
                     <img src="${image}" alt="Product view ${index + 1}" />
                   </button>
-                `).join('')}
+                `
+                  )
+                  .join("")}
               </div>
-            ` : ''}
+            `
+                : ""
+            }
           </div>
 
           <div class="product-details">
@@ -104,16 +117,24 @@ export class ProductDetailPage {
             
             <div class="product-rating">
               <div class="stars">
-                ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
+                ${"★".repeat(Math.floor(product.rating))}${"☆".repeat(
+      5 - Math.floor(product.rating)
+    )}
               </div>
               <span class="rating-value">${product.rating}/5</span>
             </div>
 
             <div class="product-pricing">
-              ${product.discountPercentage > 0 ? `
+              ${
+                product.discountPercentage > 0
+                  ? `
                 <span class="original-price">$${product.price.toFixed(2)}</span>
-                <span class="discount-percentage">-${Math.round(product.discountPercentage)}%</span>
-              ` : ''}
+                <span class="discount-percentage">-${Math.round(
+                  product.discountPercentage
+                )}%</span>
+              `
+                  : ""
+              }
               <span class="current-price">$${discountedPrice.toFixed(2)}</span>
             </div>
 
@@ -124,18 +145,24 @@ export class ProductDetailPage {
 
             <div class="product-stock">
               <span class="stock-label">Stock:</span>
-              <span class="stock-value ${product.stock < 10 ? 'low-stock' : ''}">${product.stock} available</span>
+              <span class="stock-value ${
+                product.stock < 10 ? "low-stock" : ""
+              }">${product.stock} available</span>
             </div>
 
             <div class="product-actions">
               <div class="quantity-selector">
                 <button class="quantity-btn minus">-</button>
-                <input type="number" class="quantity-input" value="1" min="1" max="${product.stock}" />
+                <input type="number" class="quantity-input" value="1" min="1" max="${
+                  product.stock
+                }" />
                 <button class="quantity-btn plus">+</button>
               </div>
               
-              <button class="btn btn-primary add-to-cart-btn" ${product.stock === 0 ? 'disabled' : ''}>
-                ${product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+              <button class="btn btn-primary add-to-cart-btn" ${
+                product.stock === 0 ? "disabled" : ""
+              }>
+                ${product.stock === 0 ? "Out of Stock" : "Add to Cart"}
               </button>
             </div>
           </div>
@@ -148,10 +175,10 @@ export class ProductDetailPage {
 
   private setupEventListeners(): void {
     // Breadcrumb navigation
-    this.element.addEventListener('click', (e) => {
+    this.element.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
-      const route = target.getAttribute('data-route');
-      
+      const route = target.getAttribute("data-route");
+
       if (route) {
         e.preventDefault();
         router.navigate(route);
@@ -159,27 +186,31 @@ export class ProductDetailPage {
     });
 
     // Image gallery
-    this.element.querySelectorAll('.thumbnail').forEach(thumb => {
-      thumb.addEventListener('click', (e) => {
-        const index = parseInt((e.currentTarget as HTMLElement).getAttribute('data-index') || '0');
+    this.element.querySelectorAll(".thumbnail").forEach((thumb) => {
+      thumb.addEventListener("click", (e) => {
+        const index = parseInt(
+          (e.currentTarget as HTMLElement).getAttribute("data-index") || "0"
+        );
         this.currentImageIndex = index;
         this.updateMainImage();
       });
     });
 
     // Quantity controls
-    const quantityInput = this.element.querySelector('.quantity-input') as HTMLInputElement;
-    const minusBtn = this.element.querySelector('.quantity-btn.minus');
-    const plusBtn = this.element.querySelector('.quantity-btn.plus');
+    const quantityInput = this.element.querySelector(
+      ".quantity-input"
+    ) as HTMLInputElement;
+    const minusBtn = this.element.querySelector(".quantity-btn.minus");
+    const plusBtn = this.element.querySelector(".quantity-btn.plus");
 
-    minusBtn?.addEventListener('click', () => {
+    minusBtn?.addEventListener("click", () => {
       const current = parseInt(quantityInput.value);
       if (current > 1) {
         quantityInput.value = (current - 1).toString();
       }
     });
 
-    plusBtn?.addEventListener('click', () => {
+    plusBtn?.addEventListener("click", () => {
       const current = parseInt(quantityInput.value);
       const product = store.getState().selectedProduct;
       if (product && current < product.stock) {
@@ -188,11 +219,11 @@ export class ProductDetailPage {
     });
 
     // Add to cart
-    const addToCartBtn = this.element.querySelector('.add-to-cart-btn');
-    addToCartBtn?.addEventListener('click', () => {
+    const addToCartBtn = this.element.querySelector(".add-to-cart-btn");
+    addToCartBtn?.addEventListener("click", () => {
       const product = store.getState().selectedProduct;
       const quantity = parseInt(quantityInput.value);
-      
+
       if (product && quantity > 0) {
         store.addToCart(product, quantity);
         this.showAddedToCartFeedback(addToCartBtn as HTMLElement);
@@ -204,26 +235,28 @@ export class ProductDetailPage {
     const product = store.getState().selectedProduct;
     if (!product) return;
 
-    const mainImg = this.element.querySelector('.product-main-img') as HTMLImageElement;
-    const thumbnails = this.element.querySelectorAll('.thumbnail');
-    
+    const mainImg = this.element.querySelector(
+      ".product-main-img"
+    ) as HTMLImageElement;
+    const thumbnails = this.element.querySelectorAll(".thumbnail");
+
     if (mainImg) {
       mainImg.src = product.images[this.currentImageIndex] || product.thumbnail;
     }
-    
+
     thumbnails.forEach((thumb, index) => {
-      thumb.classList.toggle('active', index === this.currentImageIndex);
+      thumb.classList.toggle("active", index === this.currentImageIndex);
     });
   }
 
   private showAddedToCartFeedback(button: HTMLElement): void {
     const originalText = button.textContent;
-    button.textContent = 'Added to Cart!';
-    button.classList.add('added');
-    
+    button.textContent = "Added to Cart!";
+    button.classList.add("added");
+
     setTimeout(() => {
       button.textContent = originalText;
-      button.classList.remove('added');
+      button.classList.remove("added");
     }, 2000);
   }
 

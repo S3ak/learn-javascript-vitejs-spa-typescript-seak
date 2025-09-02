@@ -1,21 +1,21 @@
-import { store } from '../store';
-import { router } from '../router';
+import { store } from "../services/store";
+import { router } from "../router";
 
 export class ProfilePage {
   private element: HTMLElement;
 
   constructor() {
-    this.element = document.createElement('div');
-    this.element.className = 'profile-page';
+    this.element = document.createElement("div");
+    this.element.className = "profile-page";
     this.render();
     this.setupEventListeners();
   }
 
   private render(): void {
     const state = store.getState();
-    
+
     if (!state.auth.isAuthenticated || !state.auth.user) {
-      router.navigate('signin');
+      router.navigate("signin");
       return;
     }
 
@@ -62,19 +62,25 @@ export class ProfilePage {
           <div class="profile-section">
             <h2>Order History</h2>
             <div class="order-history">
-              ${orderHistory.map(order => `
+              ${orderHistory
+                .map(
+                  (order) => `
                 <div class="order-item">
                   <div class="order-header">
                     <span class="order-id">Order #${order.id}</span>
                     <span class="order-date">${order.date}</span>
-                    <span class="order-status ${order.status.toLowerCase()}">${order.status}</span>
+                    <span class="order-status ${order.status.toLowerCase()}">${
+                    order.status
+                  }</span>
                   </div>
                   <div class="order-details">
                     <span class="order-items">${order.items} items</span>
                     <span class="order-total">$${order.total.toFixed(2)}</span>
                   </div>
                 </div>
-              `).join('')}
+              `
+                )
+                .join("")}
             </div>
           </div>
 
@@ -93,47 +99,47 @@ export class ProfilePage {
   private generateMockOrderHistory() {
     return [
       {
-        id: '12345',
-        date: '2024-12-15',
-        status: 'Delivered',
+        id: "12345",
+        date: "2024-12-15",
+        status: "Delivered",
         items: 3,
-        total: 89.97
+        total: 89.97,
       },
       {
-        id: '12344',
-        date: '2024-12-10',
-        status: 'Shipped',
+        id: "12344",
+        date: "2024-12-10",
+        status: "Shipped",
         items: 1,
-        total: 29.99
+        total: 29.99,
       },
       {
-        id: '12343',
-        date: '2024-12-05',
-        status: 'Processing',
+        id: "12343",
+        date: "2024-12-05",
+        status: "Processing",
         items: 2,
-        total: 159.98
-      }
+        total: 159.98,
+      },
     ];
   }
 
   private setupEventListeners(): void {
-    this.element.addEventListener('click', (e) => {
+    this.element.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
-      
-      if (target.classList.contains('logout-btn')) {
+
+      if (target.classList.contains("logout-btn")) {
         e.preventDefault();
         store.logout();
-        router.navigate('products');
+        router.navigate("products");
       }
-      
-      if (target.classList.contains('edit-profile-btn')) {
+
+      if (target.classList.contains("edit-profile-btn")) {
         e.preventDefault();
-        alert('Profile editing would be implemented in a real application');
+        alert("Profile editing would be implemented in a real application");
       }
-      
-      if (target.classList.contains('change-password-btn')) {
+
+      if (target.classList.contains("change-password-btn")) {
         e.preventDefault();
-        alert('Password change would be implemented in a real application');
+        alert("Password change would be implemented in a real application");
       }
     });
   }

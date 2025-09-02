@@ -1,12 +1,12 @@
-import { store } from '../store';
-import { router } from '../router';
+import { store } from "../services/store";
+import { router } from "../router";
 
 export class CheckoutPage {
   private element: HTMLElement;
 
   constructor() {
-    this.element = document.createElement('div');
-    this.element.className = 'checkout-page';
+    this.element = document.createElement("div");
+    this.element.className = "checkout-page";
     this.render();
     this.setupEventListeners();
   }
@@ -30,30 +30,44 @@ export class CheckoutPage {
             <div class="checkout-section">
               <h2>Order Summary</h2>
               <div class="order-items">
-                ${cartItems.map(item => {
-                  const discountedPrice = item.product.price * (1 - item.product.discountPercentage / 100);
-                  const itemTotal = discountedPrice * item.quantity;
-                  
-                  return `
+                ${cartItems
+                  .map((item) => {
+                    const discountedPrice =
+                      item.product.price *
+                      (1 - item.product.discountPercentage / 100);
+                    const itemTotal = discountedPrice * item.quantity;
+
+                    return `
                     <div class="order-item">
-                      <img src="${item.product.thumbnail}" alt="${item.product.title}" class="item-image" />
+                      <img src="${item.product.thumbnail}" alt="${
+                      item.product.title
+                    }" class="item-image" />
                       <div class="item-details">
                         <h4>${item.product.title}</h4>
                         <p class="item-brand">${item.product.brand}</p>
                         <div class="item-quantity">
-                          <button class="quantity-btn minus" data-product-id="${item.product.id}">-</button>
+                          <button class="quantity-btn minus" data-product-id="${
+                            item.product.id
+                          }">-</button>
                           <span class="quantity">${item.quantity}</span>
-                          <button class="quantity-btn plus" data-product-id="${item.product.id}">+</button>
+                          <button class="quantity-btn plus" data-product-id="${
+                            item.product.id
+                          }">+</button>
                         </div>
                       </div>
                       <div class="item-pricing">
-                        <span class="item-price">$${discountedPrice.toFixed(2)}</span>
+                        <span class="item-price">$${discountedPrice.toFixed(
+                          2
+                        )}</span>
                         <span class="item-total">$${itemTotal.toFixed(2)}</span>
-                        <button class="remove-item" data-product-id="${item.product.id}">Remove</button>
+                        <button class="remove-item" data-product-id="${
+                          item.product.id
+                        }">Remove</button>
                       </div>
                     </div>
                   `;
-                }).join('')}
+                  })
+                  .join("")}
               </div>
               
               <div class="order-total">
@@ -71,7 +85,7 @@ export class CheckoutPage {
                 </div>
                 <div class="total-row final-total">
                   <span>Total:</span>
-                  <span>$${(total + 9.99 + (total * 0.08)).toFixed(2)}</span>
+                  <span>$${(total + 9.99 + total * 0.08).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -173,57 +187,63 @@ export class CheckoutPage {
   }
 
   private setupEventListeners(): void {
-    this.element.addEventListener('click', (e) => {
+    this.element.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
-      const route = target.getAttribute('data-route');
-      const productId = target.getAttribute('data-product-id');
-      
+      const route = target.getAttribute("data-route");
+      const productId = target.getAttribute("data-product-id");
+
       if (route) {
         e.preventDefault();
         router.navigate(route);
       }
-      
-      if (target.classList.contains('quantity-btn') && productId) {
+
+      if (target.classList.contains("quantity-btn") && productId) {
         const id = parseInt(productId);
-        const currentItem = store.getState().cart.find(item => item.product.id === id);
-        
+        const currentItem = store
+          .getState()
+          .cart.find((item) => item.product.id === id);
+
         if (currentItem) {
-          if (target.classList.contains('minus')) {
+          if (target.classList.contains("minus")) {
             store.updateCartQuantity(id, currentItem.quantity - 1);
-          } else if (target.classList.contains('plus')) {
+          } else if (target.classList.contains("plus")) {
             store.updateCartQuantity(id, currentItem.quantity + 1);
           }
           this.render();
         }
       }
-      
-      if (target.classList.contains('remove-item') && productId) {
+
+      if (target.classList.contains("remove-item") && productId) {
         store.removeFromCart(parseInt(productId));
         this.render();
       }
-      
-      if (target.classList.contains('place-order')) {
+
+      if (target.classList.contains("place-order")) {
         e.preventDefault();
         this.processOrder();
       }
     });
 
     // Format card number input
-    const cardNumberInput = this.element.querySelector('#cardNumber') as HTMLInputElement;
-    cardNumberInput?.addEventListener('input', (e) => {
+    const cardNumberInput = this.element.querySelector(
+      "#cardNumber"
+    ) as HTMLInputElement;
+    cardNumberInput?.addEventListener("input", (e) => {
       const input = e.target as HTMLInputElement;
-      let value = input.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
-      const formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+      let value = input.value.replace(/\s/g, "").replace(/[^0-9]/gi, "");
+      const formattedValue = value.match(/.{1,4}/g)?.join(" ") || value;
       input.value = formattedValue;
     });
 
     // Format expiry date input
-    const expiryInput = this.element.querySelector('#expiryDate') as HTMLInputElement;
-    expiryInput?.addEventListener('input', (e) => {
+    const expiryInput = this.element.querySelector(
+      "#expiryDate"
+    ) as HTMLInputElement;
+    expiryInput?.addEventListener("input", (e) => {
       const input = e.target as HTMLInputElement;
-      let value = input.value.replace(/\D/g, '');
+      let value = input.value.replace(/\D/g, "");
       if (value.length >= 2) {
-        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        value = value.substring(0, 2) + "/" + value.substring(2, 4);
       }
       input.value = value;
     });
@@ -232,15 +252,17 @@ export class CheckoutPage {
   private async processOrder(): void {
     try {
       // Simulate order processing
-      const placeOrderBtn = this.element.querySelector('.place-order') as HTMLButtonElement;
+      const placeOrderBtn = this.element.querySelector(
+        ".place-order"
+      ) as HTMLButtonElement;
       placeOrderBtn.disabled = true;
-      placeOrderBtn.textContent = 'Processing...';
+      placeOrderBtn.textContent = "Processing...";
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Clear cart and show success
       store.clearCart();
-      
+
       this.element.innerHTML = `
         <div class="page-container">
           <div class="order-success">
@@ -254,10 +276,10 @@ export class CheckoutPage {
           </div>
         </div>
       `;
-      
+
       this.setupEventListeners();
     } catch (error) {
-      alert('Failed to process order. Please try again.');
+      alert("Failed to process order. Please try again.");
     }
   }
 
