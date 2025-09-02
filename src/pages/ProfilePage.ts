@@ -1,6 +1,8 @@
 import { store } from "../services/store";
 import { router } from "../router";
 
+// history.replaceState({ page: 'updated-profile' }, '', '/profile-updated');
+
 export class ProfilePage {
   private element: HTMLElement;
 
@@ -120,31 +122,5 @@ export class ProfilePage {
         total: 159.98,
       },
     ];
-  }
-
-  private setupEventListeners(): void {
-    this.element.addEventListener("click", (e) => {
-      const target = e.target as HTMLElement;
-
-      if (target.classList.contains("logout-btn")) {
-        e.preventDefault();
-        store.logout();
-        router.navigate("products");
-      }
-
-      if (target.classList.contains("edit-profile-btn")) {
-        e.preventDefault();
-        alert("Profile editing would be implemented in a real application");
-      }
-
-      if (target.classList.contains("change-password-btn")) {
-        e.preventDefault();
-        alert("Password change would be implemented in a real application");
-      }
-    });
-  }
-
-  getElement(): HTMLElement {
-    return this.element;
   }
 }
