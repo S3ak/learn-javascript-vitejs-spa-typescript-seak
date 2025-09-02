@@ -17,6 +17,7 @@ export interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  isLoggedIn: boolean;
 }
 
 export interface AppState {
@@ -25,6 +26,7 @@ export interface AppState {
   auth?: AuthState;
   currentPage?: string;
   selectedProduct?: Product | null;
+  numberOfItems: number;
 }
 
 export interface ProductResponse {
@@ -59,17 +61,9 @@ export interface Product {
   weight: number;
 }
 
-export enum AvailabilityStatus {
-  InStock = "In Stock",
-  LowStock = "Low Stock",
-}
+export type AvailabilityStatus = "In Stock" | "Low Stock";
 
-export enum Category {
-  Beauty = "beauty",
-  Fragrances = "fragrances",
-  Furniture = "furniture",
-  Groceries = "groceries",
-}
+export type Category = "beauty" | "fragrances" | "furniture" | "groceries";
 
 export interface Dimensions {
   depth: number;
@@ -84,13 +78,12 @@ export interface Meta {
   updatedAt: Date;
 }
 
-export enum ReturnPolicy {
-  NoReturnPolicy = "No return policy",
-  The30DaysReturnPolicy = "30 days return policy",
-  The60DaysReturnPolicy = "60 days return policy",
-  The7DaysReturnPolicy = "7 days return policy",
-  The90DaysReturnPolicy = "90 days return policy",
-}
+export type ReturnPolicy =
+  | "No return policy"
+  | "30 days return policy"
+  | "60 days return policy"
+  | "7 days return policy"
+  | "90 days return policy";
 
 export interface Review {
   comment: string;

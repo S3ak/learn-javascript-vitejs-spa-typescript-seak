@@ -5,13 +5,17 @@ import type { AppState } from "../types";
 export default async function ProfilePage(state: AppState) {
   const orderHistory = generateMockOrderHistory();
 
+  if (!state?.auth) return `<div>Something Went Wrong</div>`;
+
   const { user } = state.auth;
+  const numberOfItems = state.numberOfItems;
 
   if (!user) return `<div>Something Went Wrong</div>`;
 
   const template = `
       <div class="page-container">
         <div class="profile-header">
+        <strong>${numberOfItems}</strong>
           <div class="profile-avatar">
             <img src="${user.image}" alt="${user.firstName} ${user.lastName}" />
           </div>

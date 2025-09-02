@@ -1,8 +1,11 @@
 import "./style.css";
-import router from "./router";
+import { renderRoute } from "./router";
+import { login, logout, UPDATE_ITEMS } from "./services/store/actions";
 
 // Render initial content based on the current path
-renderContent(window.location.pathname);
+renderRoute(window.location.pathname);
+
+const AppEl = document.getElementById("app-content");
 
 // We need to listen to the browser changes
 window.addEventListener("popstate", (event) => {
@@ -10,8 +13,29 @@ window.addEventListener("popstate", (event) => {
   // If the state is null, it might be the initial page load.
   const path = event.state ? event.state.path : window.location.pathname;
   console.log(`Navigating to ${path} via popstate`);
-  renderContent(path);
+  renderRoute(path);
 });
+
+if (AppEl) {
+  AppEl.addEventListener("click", (event) => {
+    const { id } = event.target as HTMLElement;
+
+    switch (id) {
+      case "js-login-button":
+        // In a real app, this data would come from a login form as a payload
+        login({ name: "Jane Doe" });
+        break;
+      case "js-logout-button":
+        logout();
+        break;
+      case "js-demo-update":
+        UPDATE_ITEMS();
+        break;
+      default:
+        break;
+    }
+  });
+}
 
 /**
  * Add event listeners to our links
@@ -20,9 +44,7 @@ const linkEls: NodeListOf<HTMLAnchorElement> =
   document.querySelectorAll("#js-primary-nav a");
 
 if (linkEls) {
-  linkEls.forEach((link) => {
-    link.addEventListener("click", navigate);
-  });
+  linkEls.forEach((link) => link.addEventListener("click", navigate));
 }
 
 function navigate(event: MouseEvent) {
@@ -38,19 +60,6 @@ function navigate(event: MouseEvent) {
     history.pushState({ path: path }, "", path);
 
     // Update the content based on the path
-    renderContent(path);
+    renderRoute(path);
   }
 }
-
-async function renderContent(path = "") {
-  // Get the element where content will be rendered
-  const contentContainer = document.getElementById("app-content");
-
-  if (!path || !contentContainer) return;
-
-  contentContainer.innerHTML = await router(path);
-}
-
-// function isInputElement(target: EventTarget): target is HTMLInputElement {
-//   return target instanceof HTMLInputElement;
-// }

@@ -1,4 +1,4 @@
-import { store } from "../services/store";
+import { store } from "../services/store/store";
 import { router } from "../router";
 
 export class CheckoutPage {

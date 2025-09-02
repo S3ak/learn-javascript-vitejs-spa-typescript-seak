@@ -1,5 +1,5 @@
 import { ApiService } from "../services/api";
-import { store } from "../services/store";
+import { store } from "../services/store/store";
 import { router } from "../router";
 import { Product } from "../types";
 
