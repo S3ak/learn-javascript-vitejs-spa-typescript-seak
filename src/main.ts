@@ -1,13 +1,29 @@
 import "./style.css";
+import { dummyProducts } from "./stubs/dummy-products";
+import ProfilePage from "./pages/ProfilePage";
+import ProductsPage from "./pages/ProductsPage";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
-// import { Header } from './components/Header';
-// import { ProductsPage } from './pages/ProductsPage';
-// import { ProductDetailPage } from './pages/ProductDetailPage';
-// import { SignInPage } from './pages/SignInPage';
-// import { RegisterPage } from './pages/RegisterPage';
-// import { ProfilePage } from './pages/ProfilePage';
-// import { CheckoutPage } from './pages/CheckoutPage';
-// import { ContactPage } from './pages/ContactPage';
+const PATHS = {
+  home: {
+    url: "/",
+    component: HomePage,
+  },
+  products: {
+    url: "/products",
+    component: ProductsPage,
+  },
+  about: {
+    url: "/about",
+    component: AboutPage,
+  },
+  profile: {
+    url: "/profile",
+    component: ProfilePage,
+  },
+} as const;
 
 // Render initial content based on the current path
 renderContent(window.location.pathname);
@@ -56,13 +72,19 @@ function renderContent(path = "") {
 
   if (!path || !contentContainer) return;
 
-  if (path === "/") {
-    contentContainer.innerHTML = "<h1>Welcome to the Home Page</h1>";
-  } else if (path === "/products") {
-    contentContainer.innerHTML = `<h1>Our Products</h1><p>Here are some of our finest products.</p>`;
-  } else if (path === "/about") {
-    contentContainer.innerHTML = `<h1>About Us</h1><p>The shop at the end of the universe.</p>`;
+  // Find the matching route by path
+  const route = Object.values(PATHS).find((route) => route.url === path);
+
+  let html = "";
+
+  if (route) {
+    // Pass dummyState only to ProductsPage, pass nothing to others
+    html = route.component();
+  } else {
+    html = NotFoundPage();
   }
+
+  contentContainer.innerHTML = html;
 }
 
 // function isInputElement(target: EventTarget): target is HTMLInputElement {

@@ -1,0 +1,68 @@
+import type { Product } from "../types";
+
+export const dummyProducts: Product[] = [
+  {
+    id: 1,
+    title: "Wireless Headphones",
+    description: "High-quality wireless headphones with noise cancellation.",
+    price: 99.99,
+    discountPercentage: 10,
+    rating: 4.5,
+    stock: 25,
+    brand: "SoundMagic",
+    category: "electronics",
+    thumbnail: "https://example.com/images/headphones-thumb.jpg",
+    images: [
+      "https://example.com/images/headphones1.jpg",
+      "https://example.com/images/headphones2.jpg",
+    ],
+  },
+  {
+    id: 2,
+    title: "Smart Watch",
+    description: "Feature-rich smart watch with fitness tracking.",
+    price: 149.99,
+    discountPercentage: 15,
+    rating: 4.2,
+    stock: 40,
+    brand: "TechTime",
+    category: "wearables",
+    thumbnail: "https://example.com/images/smartwatch-thumb.jpg",
+    images: [
+      "https://example.com/images/smartwatch1.jpg",
+      "https://example.com/images/smartwatch2.jpg",
+    ],
+  },
+  {
+    id: 3,
+    title: "Gaming Mouse",
+    description: "Ergonomic gaming mouse with customizable buttons.",
+    price: 59.99,
+    discountPercentage: 5,
+    rating: 4.7,
+    stock: 60,
+    brand: "GamePro",
+    category: "accessories",
+    thumbnail: "https://example.com/images/mouse-thumb.jpg",
+    images: [
+      "https://example.com/images/mouse1.jpg",
+      "https://example.com/images/mouse2.jpg",
+    ],
+  },
+  {
+    id: 4,
+    title: "Bluetooth Speaker",
+    description: "Portable Bluetooth speaker with deep bass.",
+    price: 79.99,
+    discountPercentage: 12,
+    rating: 4.3,
+    stock: 30,
+    brand: "BeatBox",
+    category: "audio",
+    thumbnail: "https://example.com/images/speaker-thumb.jpg",
+    images: [
+      "https://example.com/images/speaker1.jpg",
+      "https://example.com/images/speaker2.jpg",
+    ],
+  },
+];

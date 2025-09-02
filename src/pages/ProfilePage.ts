@@ -1,30 +1,21 @@
-import { store } from "../services/store";
-import { router } from "../router";
-
 // history.replaceState({ page: 'updated-profile' }, '', '/profile-updated');
 
-export class ProfilePage {
-  private element: HTMLElement;
+import type { User } from "../types";
 
-  constructor() {
-    this.element = document.createElement("div");
-    this.element.className = "profile-page";
-    this.render();
-    this.setupEventListeners();
-  }
+const stubUser = {
+  image: "https://i.pravatar.cc/150?img=34",
+  username: "dondada",
+  firstName: "Skuba",
+  lastName: "Koooper",
+  id: 12345,
+  email: "skub@mail.com",
+  phone: "4121234567",
+};
 
-  private render(): void {
-    const state = store.getState();
+export default function ProfilePage(user: User = stubUser) {
+  const orderHistory = generateMockOrderHistory();
 
-    if (!state.auth.isAuthenticated || !state.auth.user) {
-      router.navigate("signin");
-      return;
-    }
-
-    const user = state.auth.user;
-    const orderHistory = this.generateMockOrderHistory();
-
-    this.element.innerHTML = `
+  const template = `
       <div class="page-container">
         <div class="profile-header">
           <div class="profile-avatar">
@@ -96,31 +87,32 @@ export class ProfilePage {
         </div>
       </div>
     `;
-  }
 
-  private generateMockOrderHistory() {
-    return [
-      {
-        id: "12345",
-        date: "2024-12-15",
-        status: "Delivered",
-        items: 3,
-        total: 89.97,
-      },
-      {
-        id: "12344",
-        date: "2024-12-10",
-        status: "Shipped",
-        items: 1,
-        total: 29.99,
-      },
-      {
-        id: "12343",
-        date: "2024-12-05",
-        status: "Processing",
-        items: 2,
-        total: 159.98,
-      },
-    ];
-  }
+  return template;
+}
+
+function generateMockOrderHistory() {
+  return [
+    {
+      id: "12345",
+      date: "2024-12-15",
+      status: "Delivered",
+      items: 3,
+      total: 89.97,
+    },
+    {
+      id: "12344",
+      date: "2024-12-10",
+      status: "Shipped",
+      items: 1,
+      total: 29.99,
+    },
+    {
+      id: "12343",
+      date: "2024-12-05",
+      status: "Processing",
+      items: 2,
+      total: 159.98,
+    },
+  ];
 }
