@@ -1,16 +1,16 @@
 console.log("Service Worker script loaded");
 
 // Define a name for our cache
-const CACHE_NAME = "my-pwa-shell-v1";
+const CACHE_NAME = "my-pwa-shell-v2";
 
 // Define the files that make up our app shell
 const urlsToCache = [
-  "/",
-  "/index.html",
-  "/styles.css",
-  "/main.js",
-  "/router/index.js",
-  "/pages/HomePage.js",
+  // "/",
+  // "/index.html",
+  // "/styles.css",
+  // "/main.js",
+  // "/router/index.js",
+  // "/pages/HomePage.js",
   // Add any other core files your app depends on
 ];
 

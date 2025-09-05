@@ -19,6 +19,25 @@
 
     <hr />
 
+    <article class="chat-container">
+      <h2 style="text-align: center; margin-top: 1rem">Chat via WebSockets</h2>
+      <section style="padding: 1rem">
+        <div id="js-messages" class="c-messages-container">
+          <!-- Messages will appear here -->
+        </div>
+        <form id="js-chat-form" style="display: flex; gap: 0.5rem">
+          <input
+            id="js-user-message-field"
+            name="js-user-message-field"
+            type="text"
+            placeholder="Type your message..."
+            autocomplete="off"
+          />
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </article>
+
     <main id="app-content">Loading...</main>
 
     <hr />

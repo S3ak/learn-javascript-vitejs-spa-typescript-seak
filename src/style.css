@@ -1,3 +1,52 @@
+/* Chat message container and message styling */
+
+/* FIXME: no js classes */
+.c-messages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 200px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.chat-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #eee;
+  background: #fafafa;
+
+  input {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+}
+
+.chat-message {
+  padding: 0.5rem 1rem;
+  background: var(--gray-100);
+  border-radius: 0.5rem;
+  color: var(--gray-900);
+  font-size: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
 :root {
   font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

@@ -1,25 +1,24 @@
+import { io } from "socket.io-client";
+import { renderMessage } from "../chat/chat";
+
 const WS_PORT = 8080;
-const WS_URL = `ws://localhost:${WS_PORT}`;
-const socket = new WebSocket(WS_URL);
+const WS_URL = `http://localhost:${WS_PORT}`;
 
-// Connection opened
-socket.addEventListener("open", (_event) => {
-  console.log("Connected to WebSocket server!");
-  // Send a message to the server
-  socket.send("Hello Server, this is the client!");
+// Connect to the Socket.io server
+const socket = io(WS_URL);
+
+// Listen for the built-in 'connect' event
+socket.on("connect", () => {
+  console.log("Successfully connected to server with ID:", socket.id);
 });
 
-// Listen for messages from the server
-socket.addEventListener("message", (event) => {
-  console.log("Message from server: ", event.data);
+// Listen for the built-in 'disconnect' event
+socket.on("disconnect", () => {
+  console.log("Disconnected from server.");
 });
 
-// Listen for connection close
-socket.addEventListener("close", (_event) => {
-  console.log("Disconnected from WebSocket server.");
+socket.on("chat message", (message) => {
+  renderMessage(message);
 });
 
-// Listen for errors
-socket.addEventListener("error", (error) => {
-  console.error("WebSocket Error: ", error);
-});
+export default socket;
