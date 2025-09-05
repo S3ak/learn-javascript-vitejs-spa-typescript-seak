@@ -1,6 +1,7 @@
 import "./style.css";
 import { renderRoute } from "./router";
 import { login, logout, UPDATE_ITEMS } from "./services/store/actions";
+import "./services/ws/ws";
 
 // Render initial content based on the current path
 renderRoute(window.location.pathname);
