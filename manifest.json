@@ -1,0 +1,20 @@
+{
+  "name": "How to build a SPA/ PWA",
+  "short_name": "LearnSPA",
+  "start_url": "/",
+  "display": "minimal-ui",
+  "background_color": "Red",
+  "theme_color": "pink",
+  "icons": [
+    {
+      "src": "/public/logo-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/public/logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

@@ -1,13 +1,23 @@
 const BASE_URL = "https://dummyjson.com";
 
-async function apiClient(endpoint: string, options = {}) {
+interface ApiClientOptions extends RequestInit {
+  body?: BodyInit | null | undefined | string;
+}
+
+type Endpoint = string;
+
+interface Body {
+  [key: string]: string;
+}
+
+async function apiClient(endpoint: string, options: ApiClientOptions = {}) {
   const { body, ...customOptions } = options;
 
   const headers = {
     "Content-Type": "application/json",
   };
 
-  const config = {
+  const config: RequestInit = {
     method: body ? "POST" : "GET",
     ...customOptions,
     headers: {
@@ -43,12 +53,11 @@ async function apiClient(endpoint: string, options = {}) {
   }
 }
 
-type Endpoint = string;
-
 // Now we can export helper methods
 export const get = (endpoint: Endpoint) => apiClient(endpoint);
-export const post = (endpoint: Endpoint, body) => apiClient(endpoint, { body });
-export const put = (endpoint: Endpoint, body) =>
+export const post = (endpoint: Endpoint, body: Body) =>
+  apiClient(endpoint, { body });
+export const put = (endpoint: Endpoint, body: Body) =>
   apiClient(endpoint, { method: "PUT", body });
 export const del = (endpoint: Endpoint) =>
   apiClient(endpoint, { method: "DELETE" });
