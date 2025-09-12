@@ -22,6 +22,30 @@ export class NetworkError extends Error {
   }
 }
 
+/**
+ * Represents an error returned from an API request.
+ * Extends the standard `Error` object to include an HTTP status code.
+ *
+ * @remarks
+ * Use this class to throw or handle errors that originate from API responses,
+ * allowing you to access both the error message and the associated HTTP status code.
+ *
+ * @example
+ * ```typescript
+ * try { 
+        throw new ValidationError('The email address is not valid.'); 
+    } catch (error) { 
+        console.error(error); 
+        // The console will show: 
+        // ValidationError: The email address is not valid. 
+        //   at ... (stack trace) 
+    }
+ * ```
+ *
+ * @extends Error
+ *
+ * @property statusCode - The HTTP status code associated with the error.
+ */
 export class ApiError extends Error {
   public statusCode: number;
 
