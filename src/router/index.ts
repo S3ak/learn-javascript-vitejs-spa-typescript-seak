@@ -5,6 +5,7 @@ import AboutPage from "../pages/AboutPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import type { AppState } from "../types";
 import { state } from "../services/store/store";
+import { lazyLoadImgs } from "../utils/lazy-load-img";
 
 const PATHS = {
   home: {
@@ -60,4 +61,7 @@ export async function renderRoute(path?: string | undefined) {
   if (!path || !contentContainer) return;
 
   contentContainer.innerHTML = await router(path, state);
+
+  // Run any code that needs DOM elements here after route render;
+  lazyLoadImgs();
 }

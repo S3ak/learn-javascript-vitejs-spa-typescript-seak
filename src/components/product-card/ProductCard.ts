@@ -1,20 +1,20 @@
+import { LAZY_LOAD_CLASSNAME, PLACEHOLDER_URL } from "../../constants";
 import type { Product } from "../../types";
 
 export default function ProductCard({ product }: { product: Product }) {
-  const discountedPrice =
-    product.price * (1 - product.discountPercentage / 100);
+  const { discountPercentage, price, thumbnail, id, title, rating, brand } =
+    product;
+  const discountedPrice = price * (1 - discountPercentage / 100);
 
   return `
-      <div class="product-card" data-product-id="${product.id}">
+      <div class="product-card" data-product-id="${id}">
         <div class="product-image">
-          <img src="${product.thumbnail}" alt="${
-    product.title
-  }" loading="lazy" />
+          <img data-src="${thumbnail}" src="${PLACEHOLDER_URL}" alt="${title}" loading="lazy" class="${LAZY_LOAD_CLASSNAME}" />
           ${
-            product.discountPercentage > 0
+            discountPercentage > 0
               ? `
             <div class="discount-badge">-${Math.round(
-              product.discountPercentage
+              discountPercentage
             )}%</div>
           `
               : ""
@@ -22,20 +22,20 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
         
         <div class="product-info">
-          <h3 class="product-title">${product.title}</h3>
-          <p class="product-brand">${product.brand}</p>
+          <h3 class="product-title">${title}</h3>
+          <p class="product-brand">${brand}</p>
           <div class="product-rating">
-            ${"★".repeat(Math.floor(product.rating))}${"☆".repeat(
-    5 - Math.floor(product.rating)
+            ${"★".repeat(Math.floor(rating))}${"☆".repeat(
+    5 - Math.floor(rating)
   )}
-            <span class="rating-value">${product.rating}</span>
+            <span class="rating-value">${rating}</span>
           </div>
           
           <div class="product-pricing">
             ${
-              product.discountPercentage > 0
+              discountPercentage > 0
                 ? `
-              <span class="original-price">$${product.price.toFixed(2)}</span>
+              <span class="original-price">$${price.toFixed(2)}</span>
             `
                 : ""
             }
@@ -43,14 +43,10 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
           
           <div class="product-actions">
-            <button class="btn btn-primary add-to-cart" data-product-id="${
-              product.id
-            }">
+            <button class="btn btn-primary add-to-cart" data-product-id="${id}">
               Add to Cart
             </button>
-            <button class="btn btn-secondary view-details" data-product-id="${
-              product.id
-            }">
+            <button class="btn btn-secondary view-details" data-product-id="${id}">
               View Details
             </button>
           </div>
