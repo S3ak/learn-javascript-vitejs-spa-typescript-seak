@@ -3,11 +3,19 @@ import { renderRoute } from "./router";
 import { login, logout, UPDATE_ITEMS } from "./services/store/actions";
 import "./services/ws/ws";
 import "./services/chat/chat";
+import {
+  handleGlobalError,
+  catchUnhandledRejection,
+} from "./services/error/error";
 
 // Render initial content based on the current path
 renderRoute(window.location.pathname);
 
 const AppEl = document.getElementById("app-content");
+
+window.onerror = handleGlobalError;
+
+window.addEventListener("unhandledrejection", catchUnhandledRejection);
 
 // We need to listen to the browser changes
 window.addEventListener("popstate", (event) => {

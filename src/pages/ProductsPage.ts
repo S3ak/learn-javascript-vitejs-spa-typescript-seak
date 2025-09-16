@@ -1,5 +1,4 @@
 import type { AppState, Product, ProductResponse } from "../types";
-import AppButton from "../components/app-button/AppButton";
 import ProductCard from "../components/product-card/ProductCard";
 import { get } from "../services/api";
 import Search from "../components/search/Search";

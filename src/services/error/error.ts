@@ -56,3 +56,62 @@ export class ApiError extends Error {
     this.statusCode = statusCode;
   }
 }
+
+export function handleGlobalError(
+  event: string | Event,
+  source?: string,
+  lineno?: number,
+  colno?: number,
+  error?: Error
+) {
+  console.warn("--- Global Error Caught ---");
+  console.warn("Message:", event);
+  console.warn("Source:", source);
+  console.warn("Line:", lineno);
+  console.warn("Column:", colno);
+  console.warn("Error Object:", error);
+
+  // In a real app, you would send this data to a logging service.
+  // Sentry.captureException(error);
+  if (typeof event === "string") {
+    logErrorAnalytics(event);
+  } else {
+    logErrorAnalytics("A generic error occured in our app");
+  }
+
+  // Return true to prevent the browser's default error handling (e.g., logging to console).
+  return true;
+}
+
+export function catchUnhandledRejection(event: PromiseRejectionEvent) {
+  console.log("--- Unhandled Promise Rejection Caught ---");
+  console.log("Reason for rejection:", event.reason);
+
+  // In a real app, send the reason to a logging service.
+  // Sentry.captureException(event.reason);
+  logErrorAnalytics(event.reason);
+
+  // Prevent the browser's default handling (logging to console).
+  event.preventDefault();
+}
+
+async function logErrorAnalytics(message: string) {
+  try {
+    const res = await fetch("https://dummyjson.com/c/4b88-5b6b-456d-b78f", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to log error: ${res.status} ${res.statusText}`);
+    }
+
+    const data = res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
